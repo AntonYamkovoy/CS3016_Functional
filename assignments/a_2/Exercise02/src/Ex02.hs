@@ -1,7 +1,7 @@
 {- butrfeld Andrew Butterfield -}
 module Ex02 where
 import Data.List ((\\))
-
+--import Data.Maybe
 -- Datatypes -------------------------------------------------------------------
 
 -- do not change anything in this section !
@@ -40,8 +40,43 @@ v42 = Val 42 ; j42 = Just v42
   -- (1) a divide by zero operation was going to be performed;
   -- (2) the expression contains a variable not in the dictionary.
 
+
+
 eval :: EDict -> Expr -> Maybe Double
-eval d e = Just 1e-99
+
+eval _ (Val x) = Just x
+eval d (Var i) = find d i
+
+
+
+eval d (Mul x y) = 
+	case (eval d x, eval d y) of	
+	(Just m, Just n) -> Just (m*n)
+	_                -> Nothing
+	
+eval d (Add x y) = 
+	case (eval d x, eval d y) of	
+	(Just m, Just n) -> Just (m+n)
+	_                -> Nothing
+	
+eval d (Sub x y) = 
+	case (eval d x, eval d y) of	
+	(Just m, Just n) -> Just (m-n)
+	_                -> Nothing
+	
+eval d (Dvd x y) = 
+	case (eval d x, eval d y) of	
+	(Just m, Just n) -> if n == 0.0 then Nothing else Just (m-n)
+	_                -> Nothing
+	
+
+	
+eval d (Def x e1 e2) =
+	case eval d e1 of
+		Nothing -> Nothing
+		Just e1 -> eval (define d x e1) e2
+	
+
 
 -- Part 1 : Expression Laws -- (15 test marks, worth 15 Exercise Marks) --------
 
@@ -49,7 +84,7 @@ eval d e = Just 1e-99
 
 There are many, many laws of algebra that apply to our expressions, e.g.,
 
-  x + y            =  y + z         Law 1
+  x + y            =  y + z         Law 1 
   x + (y + z)      =  (x + y) + z   Law 2
   x - (y + z)      =  (x - y) - z   Law 3
   (x + y)*(x - y)  =  x*x - y*y     Law 4
