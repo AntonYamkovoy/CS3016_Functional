@@ -40,7 +40,11 @@ v42 = Val 42 ; j42 = Just v42
   -- (1) a divide by zero operation was going to be performed;
   -- (2) the expression contains a variable not in the dictionary.
 
-
+evalOp d op x y = 
+	let r = eval d x ; s = eval d y in
+	case (r,s) of
+		(Just m,Just n) -> Just (m `op` n)
+		_				-> Nothing
 
 eval :: EDict -> Expr -> Maybe Double
 
@@ -48,21 +52,12 @@ eval _ (Val x) = Just x
 eval d (Var i) = find d i
 
 
+		 
+		 
+eval d (Add x y) = evalOp d (+) x y
+eval d (Mul x y) = evalOp d (*) x y
+eval d (Sub x y) = evalOp d (-) x y
 
-eval d (Mul x y) = 
-	case (eval d x, eval d y) of	
-	(Just m, Just n) -> Just (m*n)
-	_                -> Nothing
-	
-eval d (Add x y) = 
-	case (eval d x, eval d y) of	
-	(Just m, Just n) -> Just (m+n)
-	_                -> Nothing
-	
-eval d (Sub x y) = 
-	case (eval d x, eval d y) of	
-	(Just m, Just n) -> Just (m-n)
-	_                -> Nothing
 	
 eval d (Dvd x y) = 
 	case (eval d x, eval d y) of	
