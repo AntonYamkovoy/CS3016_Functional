@@ -52,24 +52,24 @@ eval _ (Val x) = Just x
 eval d (Var i) = find d i
 
 
-		 
-		 
-eval d (Add x y) = evalOp d (+) x y
-eval d (Mul x y) = evalOp d (*) x y
-eval d (Sub x y) = evalOp d (-) x y
-
-	
 eval d (Dvd x y) = 
 	case (eval d x, eval d y) of	
-	(Just m, Just n) -> if n == 0.0 then Nothing else Just (m-n)
-	_                -> Nothing
-	
+	(Just m, Just n) -> if n == 0.0 then Nothing else Just (m/n)
+	_                -> Nothing		
+
 
 	
 eval d (Def x e1 e2) =
 	case eval d e1 of
 		Nothing -> Nothing
 		Just e1 -> eval (define d x e1) e2
+		
+eval d (Add x y) = evalOp d (+) x y
+eval d (Mul x y) = evalOp d (*) x y
+eval d (Sub x y) = evalOp d (-) x y
+
+
+	
 	
 
 
@@ -79,7 +79,7 @@ eval d (Def x e1 e2) =
 
 There are many, many laws of algebra that apply to our expressions, e.g.,
 
-  x + y            =  y + z         Law 1 
+  x + y            =  y + x         Law 1 
   x + (y + z)      =  (x + y) + z   Law 2
   x - (y + z)      =  (x - y) - z   Law 3
   (x + y)*(x - y)  =  x*x - y*y     Law 4
@@ -96,14 +96,21 @@ There are many, many laws of algebra that apply to our expressions, e.g.,
 -}
 
 
+
+
 law1 :: Expr -> Maybe Expr
-law1 e = j42
+law1 (Add x y) = Just(Add y x)
+law1 _ = Nothing
 
 law2 :: Expr -> Maybe Expr
-law2 e = j42
+law2 (Add x (Add y z) ) = Just( Add (Add x y) z ) 
+law2 _ = Nothing
 
 law3 :: Expr -> Maybe Expr
-law3 e = j42
+law3 (Sub x (Add y z) ) = Just( Sub (Sub x y ) z ) 
+law3 _ = Nothing
 
 law4 :: Expr -> Maybe Expr
-law4 e = j42
+
+law4 (Mul(Add (a) (b))(Sub (a') (b'))) =  Just (Sub (Mul (a) (a')) (Mul (b) (b')))
+law4 _ = Nothing
