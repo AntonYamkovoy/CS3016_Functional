@@ -33,7 +33,7 @@ insBST key value Leaf = Branch Leaf key value Leaf
 insBST key value (Branch left a b right)
 	| a > key = Branch (insBST key value left) a b right
 	| a < key = Branch left a b (insBST key value right)
-	| a== key = Branch left key value right
+	| a == key = Branch left key value right
 
 
 
@@ -43,10 +43,48 @@ insBST key value (Branch left a b right)
 
 -- convert an association list to a binary search tree
 assoc2bst :: Ord a => Assoc a b -> BT a b
-assoc2bst _ = error "assoc2bst not yet implemented"
 
+assoc2bst [] = Leaf
+assoc2bst ((x,y):l) = 
+	let temp = assoc2bst l
+		in insBST x y temp
+		
+		
 -- Coding Part 3 (6 Marks)
 
 -- convert a binary search tree into an (ordered) association list
 bst2assoc :: Ord c =>  BT c e -> Assoc c e
-bst2assoc _ = error "bst2assoc not yet implemented"
+bst2assoc Leaf = []
+
+bst2assoc (Branch left a b right) = bst2assoc left  ++ [(a,b)] ++ bst2assoc right
+
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
