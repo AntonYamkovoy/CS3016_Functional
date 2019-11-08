@@ -28,7 +28,7 @@ Keep the `proof-check` and `CSU24016` files seperate
 ### Part 2 - Proving (15 marks)
 
 1. Open a command-line window and navigate to CSU34016-1920/Exercise03
-2. Enter `prfchk Ex03.thr`.
+2. Enter `prfchk Ex03`.
 3. The check fails
 4. Your task is to edit `data/Ex03.thr` to:
   1. get `prfchk` to report `OK` or `Ok` for all proof steps, with no error `!!` or `??` indications.

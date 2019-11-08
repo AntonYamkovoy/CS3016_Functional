@@ -27,6 +27,7 @@ lkpBST (Branch left k d right) k'
 
 -- insert into binary (search) tree
 insBST :: Ord a => a -> b -> BT a b -> BT a b
+
 insBST _ _ _  =  error "insBST not yet implmented"
 
 -- Coding Part 2 (6 Marks)
