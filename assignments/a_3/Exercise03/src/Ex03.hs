@@ -28,7 +28,16 @@ lkpBST (Branch left k d right) k'
 -- insert into binary (search) tree
 insBST :: Ord a => a -> b -> BT a b -> BT a b
 
-insBST _ _ _  =  error "insBST not yet implmented"
+
+insBST key value Leaf = Branch Leaf key value Leaf
+insBST key value (Branch left a b right)
+	| a > key = Branch (insBST key value left) a b right
+	| a < key = Branch left a b (insBST key value right)
+	| a== key = Branch left key value right
+
+
+
+
 
 -- Coding Part 2 (6 Marks)
 
